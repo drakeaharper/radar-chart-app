@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Configuration, Attribute, LevelDescription } from '../App';
+import type React from 'react';
+import { useState } from 'react';
+import { type Attribute, type Configuration, LevelDescription } from '../App';
 
 interface ConfigurationPanelProps {
   configuration: Configuration;
@@ -16,7 +17,7 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
   savedConfigurations,
   onConfigurationChange,
   onSaveConfiguration,
-  onDeleteConfiguration
+  onDeleteConfiguration,
 }) => {
   const [errors, setErrors] = useState<string[]>([]);
   const [saveAsName, setSaveAsName] = useState<string>('');
@@ -26,38 +27,38 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
 
   const validateConfiguration = (config: Configuration): string[] => {
     const newErrors: string[] = [];
-    
+
     if (config.attributes.length < 3) {
       newErrors.push('Minimum 3 attributes required');
     }
-    
+
     if (config.levels < 1) {
       newErrors.push('Minimum 1 level required');
     }
-    
-    const attributeNames = config.attributes.map(attr => attr.name.trim());
+
+    const attributeNames = config.attributes.map((attr) => attr.name.trim());
     const uniqueNames = new Set(attributeNames);
     if (uniqueNames.size !== attributeNames.length) {
       newErrors.push('Attribute names must be unique');
     }
-    
-    if (attributeNames.some(name => name === '')) {
+
+    if (attributeNames.some((name) => name === '')) {
       newErrors.push('Attribute names cannot be empty');
     }
-    
+
     // Validate level descriptions if they exist
     if (config.levelDescriptions && config.levelDescriptions.length > 0) {
-      const levelNames = config.levelDescriptions.map(level => level.name.trim());
+      const levelNames = config.levelDescriptions.map((level) => level.name.trim());
       const uniqueLevelNames = new Set(levelNames);
       if (uniqueLevelNames.size !== levelNames.length) {
         newErrors.push('Level names must be unique');
       }
-      
-      if (levelNames.some(name => name === '')) {
+
+      if (levelNames.some((name) => name === '')) {
         newErrors.push('Level names cannot be empty');
       }
     }
-    
+
     return newErrors;
   };
 
@@ -85,7 +86,12 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
   };
 
   const isPresetConfiguration = (configName: string): boolean => {
-    return ['Technical Capability Assessment', 'Skills Assessment', 'Product Features', 'Basic Template'].includes(configName);
+    return [
+      'Technical Capability Assessment',
+      'Skills Assessment',
+      'Product Features',
+      'Basic Template',
+    ].includes(configName);
   };
 
   const handleAttributeDescriptionChange = (index: number, description: string) => {
@@ -115,7 +121,10 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
 
   const addLevelDescription = () => {
     const newLevelDescriptions = [...(configuration.levelDescriptions || [])];
-    newLevelDescriptions.push({ name: `Level ${newLevelDescriptions.length + 1}`, description: '' });
+    newLevelDescriptions.push({
+      name: `Level ${newLevelDescriptions.length + 1}`,
+      description: '',
+    });
     const newConfig = { ...configuration, levelDescriptions: newLevelDescriptions };
     onConfigurationChange(newConfig);
   };
@@ -138,11 +147,11 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
   };
 
   const isSavedConfiguration = (configName: string): boolean => {
-    return savedConfigurations.some(config => config.name === configName);
+    return savedConfigurations.some((config) => config.name === configName);
   };
 
   const handlePresetChange = (presetName: string) => {
-    const preset = presetConfigurations.find(p => p.name === presetName);
+    const preset = presetConfigurations.find((p) => p.name === presetName);
     if (preset) {
       onConfigurationChange({ ...preset });
       setErrors([]);
@@ -168,11 +177,11 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
   const addAttribute = () => {
     const newAttribute: Attribute = {
       name: `Attribute ${configuration.attributes.length + 1}`,
-      value: 1
+      value: 1,
     };
     const newConfig = {
       ...configuration,
-      attributes: [...configuration.attributes, newAttribute]
+      attributes: [...configuration.attributes, newAttribute],
     };
     const validationErrors = validateConfiguration(newConfig);
     setErrors(validationErrors);
@@ -197,7 +206,7 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
   return (
     <div>
       <h2>Configuration</h2>
-      
+
       <div className="config-section">
         <h3>Configuration Name</h3>
         <input
@@ -211,12 +220,12 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
 
       <div className="config-section">
         <h3>Load Configuration</h3>
-        <select 
+        <select
           className="preset-selector"
           value={configuration.name}
           onChange={(e) => handlePresetChange(e.target.value)}
         >
-          {presetConfigurations.map(preset => (
+          {presetConfigurations.map((preset) => (
             <option key={preset.name} value={preset.name}>
               {preset.name} {isPresetConfiguration(preset.name) ? '(Preset)' : '(Saved)'}
             </option>
@@ -251,7 +260,7 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
         >
           Save As New Configuration
         </button>
-        
+
         {showSaveDialog && (
           <div className="save-dialog">
             <input
@@ -307,17 +316,11 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
                   min="0"
                   max={configuration.levels}
                 />
-                <button
-                  className="expand-btn"
-                  onClick={() => toggleAttributeExpansion(index)}
-                >
+                <button className="expand-btn" onClick={() => toggleAttributeExpansion(index)}>
                   {expandedAttributes.has(index) ? '▼' : '▶'}
                 </button>
                 {configuration.attributes.length > 3 && (
-                  <button
-                    className="remove-btn"
-                    onClick={() => removeAttribute(index)}
-                  >
+                  <button className="remove-btn" onClick={() => removeAttribute(index)}>
                     Remove
                   </button>
                 )}
@@ -345,10 +348,7 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
       <div className="config-section">
         <div className="levels-header">
           <h3>Levels</h3>
-          <button
-            className="expand-btn"
-            onClick={() => setExpandedLevels(!expandedLevels)}
-          >
+          <button className="expand-btn" onClick={() => setExpandedLevels(!expandedLevels)}>
             {expandedLevels ? '▼' : '▶'}
           </button>
         </div>
@@ -372,10 +372,7 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
                     onChange={(e) => handleLevelNameChange(index, e.target.value)}
                     placeholder="Level name"
                   />
-                  <button
-                    className="remove-btn"
-                    onClick={() => removeLevelDescription(index)}
-                  >
+                  <button className="remove-btn" onClick={() => removeLevelDescription(index)}>
                     Remove
                   </button>
                 </div>

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Attribute } from '../App';
+import type React from 'react';
+import type { Attribute } from '../App';
 
 interface AttributeTableProps {
   attribute: Attribute;
@@ -12,21 +12,31 @@ const AttributeTable: React.FC<AttributeTableProps> = ({ attribute }) => {
 
   const getLevelName = (level: number): string => {
     switch (level) {
-      case 1: return 'Basic';
-      case 2: return 'Proficient';
-      case 3: return 'Advanced';
-      case 4: return 'Expert';
-      default: return `Level ${level}`;
+      case 1:
+        return 'Basic';
+      case 2:
+        return 'Proficient';
+      case 3:
+        return 'Advanced';
+      case 4:
+        return 'Expert';
+      default:
+        return `Level ${level}`;
     }
   };
 
   const getLevelColor = (level: number): string => {
     switch (level) {
-      case 1: return '#ffe6cc'; // Light orange
-      case 2: return '#fff2cc'; // Light yellow
-      case 3: return '#d5e8d4'; // Light green
-      case 4: return '#dae8fc'; // Light blue
-      default: return '#f8f9fa';
+      case 1:
+        return '#ffe6cc'; // Light orange
+      case 2:
+        return '#fff2cc'; // Light yellow
+      case 3:
+        return '#d5e8d4'; // Light green
+      case 4:
+        return '#dae8fc'; // Light blue
+      default:
+        return '#f8f9fa';
     }
   };
 
@@ -40,17 +50,13 @@ const AttributeTable: React.FC<AttributeTableProps> = ({ attribute }) => {
       </div>
       <div className="attribute-table-body">
         {attribute.levelDescriptions.map((levelDesc) => (
-          <div 
-            key={levelDesc.level} 
+          <div
+            key={levelDesc.level}
             className="level-row"
             style={{ backgroundColor: getLevelColor(levelDesc.level) }}
           >
-            <div className="level-name">
-              {getLevelName(levelDesc.level)}
-            </div>
-            <div className="level-description">
-              {levelDesc.description}
-            </div>
+            <div className="level-name">{getLevelName(levelDesc.level)}</div>
+            <div className="level-description">{levelDesc.description}</div>
           </div>
         ))}
       </div>

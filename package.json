@@ -22,7 +22,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "biome format --write src/",
+    "lint": "biome lint src/",
+    "check": "biome check src/",
+    "lint:fix": "biome check --write src/"
   },
   "eslintConfig": {
     "extends": [
@@ -41,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.6"
   }
 }
