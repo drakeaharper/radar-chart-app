@@ -334,37 +334,42 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
         <div className="space-y-3">
           {configuration.attributes.map((attribute, index) => (
             <div key={index} className="border border-gray-200 rounded-md p-4 bg-white">
+              {/* Main input row */}
               <div className="flex items-center space-x-2 mb-2">
                 <input
                   type="text"
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-radar-500 focus:border-radar-500 sm:text-sm"
+                  className="flex-1 min-w-0 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-radar-500 focus:border-radar-500 sm:text-sm"
                   value={attribute.name}
                   onChange={(e) => handleAttributeNameChange(index, e.target.value)}
                   placeholder="Attribute name"
                 />
                 <input
                   type="number"
-                  className="w-20 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-radar-500 focus:border-radar-500 sm:text-sm"
+                  className="w-16 sm:w-20 px-2 sm:px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-radar-500 focus:border-radar-500 sm:text-sm"
                   value={attribute.value}
                   onChange={(e) => handleAttributeValueChange(index, parseInt(e.target.value) || 0)}
                   min="0"
                   max={configuration.levels}
                 />
                 <button 
-                  className="p-2 text-gray-400 hover:text-gray-600"
+                  className="p-2 text-gray-400 hover:text-gray-600 flex-shrink-0"
                   onClick={() => toggleAttributeExpansion(index)}
                 >
                   {expandedAttributes.has(index) ? '▼' : '▶'}
                 </button>
-                {configuration.attributes.length > 3 && (
+              </div>
+              
+              {/* Remove button row - separate for better mobile layout */}
+              {configuration.attributes.length > 3 && (
+                <div className="mb-2">
                   <button 
-                    className="px-3 py-2 text-sm text-red-600 hover:text-red-800 border border-red-300 rounded-md hover:bg-red-50"
+                    className="w-full sm:w-auto px-3 py-2 text-sm text-red-600 hover:text-red-800 border border-red-300 rounded-md hover:bg-red-50"
                     onClick={() => removeAttribute(index)}
                   >
-                    Remove
+                    Remove Attribute
                   </button>
-                )}
-              </div>
+                </div>
+              )}
               {expandedAttributes.has(index) && (
                 <div className="mt-3 space-y-2">
                   <label className="block text-xs font-medium text-gray-700">
