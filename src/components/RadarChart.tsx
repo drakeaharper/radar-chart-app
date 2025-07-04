@@ -29,18 +29,37 @@ const RadarChart: React.FC<RadarChartProps> = ({ configuration }) => {
   const hasLevelDescriptions =
     configuration.levelDescriptions && configuration.levelDescriptions.length > 0;
 
+  // Responsive chart height and font sizes
+  const isMobile = window.innerWidth <= 768;
+  const chartHeight = isMobile ? '300px' : '400px';
+  const fontSize = isMobile ? 10 : 12;
+
   return (
     <div style={{ width: '100%' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>{configuration.name}</h2>
-      <div style={{ height: '400px', marginBottom: '20px' }}>
+      <h2 
+        style={{ 
+          textAlign: 'center', 
+          marginBottom: '20px',
+          fontSize: isMobile ? '18px' : '24px',
+          padding: '0 10px'
+        }}
+      >
+        {configuration.name}
+      </h2>
+      <div style={{ height: chartHeight, marginBottom: '20px' }}>
         <ResponsiveContainer width="100%" height="100%">
-          <RechartsRadarChart data={data}>
+          <RechartsRadarChart data={data} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
             <PolarGrid />
-            <PolarAngleAxis dataKey="subject" />
+            <PolarAngleAxis 
+              dataKey="subject" 
+              tick={{ fontSize, textAnchor: 'middle' }}
+              className="radar-axis-text"
+            />
             <PolarRadiusAxis
               angle={90}
               domain={[0, configuration.levels]}
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize }}
+              tickCount={isMobile ? 3 : 5}
             />
             <Radar
               name="Values"
@@ -48,7 +67,8 @@ const RadarChart: React.FC<RadarChartProps> = ({ configuration }) => {
               stroke="#8884d8"
               fill="#8884d8"
               fillOpacity={0.3}
-              strokeWidth={2}
+              strokeWidth={isMobile ? 1.5 : 2}
+              dot={{ r: isMobile ? 3 : 4 }}
             />
           </RechartsRadarChart>
         </ResponsiveContainer>

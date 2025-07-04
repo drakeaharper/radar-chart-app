@@ -23,6 +23,174 @@
   overflow-y: auto;
 }
 
+/* Mobile-first responsive design */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .left-panel {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    padding: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #f5f5f5;
+    max-height: 50vh;
+  }
+
+  .right-panel {
+    width: 100%;
+    padding: 15px;
+    min-height: 50vh;
+  }
+
+  .config-section {
+    margin-bottom: 20px;
+  }
+
+  .config-section h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .left-panel {
+    padding: 10px;
+    max-height: 60vh;
+  }
+
+  .right-panel {
+    padding: 10px;
+  }
+
+  .config-section {
+    margin-bottom: 15px;
+  }
+
+  .config-section h3 {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  /* Mobile attribute items */
+  .attribute-item {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .attribute-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .attribute-name,
+  .attribute-value {
+    margin-right: 0;
+    margin-bottom: 8px;
+    padding: 8px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  .attribute-value {
+    width: 100%;
+  }
+
+  .expand-btn,
+  .remove-btn {
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  /* Mobile form inputs */
+  .preset-selector,
+  .config-name-input,
+  .levels-input {
+    padding: 12px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  /* Mobile buttons */
+  .save-btn,
+  .save-as-btn,
+  .delete-btn,
+  .add-btn {
+    padding: 12px 16px;
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  /* Mobile attribute tables */
+  .attribute-table {
+    margin-bottom: 20px;
+  }
+
+  .attribute-name-cell {
+    padding: 12px;
+  }
+
+  .attribute-name-cell h4 {
+    font-size: 16px;
+  }
+
+  .attribute-name-cell .attribute-description {
+    font-size: 13px;
+  }
+
+  .level-row {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .level-name {
+    width: 100%;
+    padding: 10px 12px;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 15px;
+    text-align: center;
+  }
+
+  .level-description {
+    padding: 12px;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  /* Mobile radar chart */
+  .chart-info-panel {
+    margin-top: 15px;
+    padding-top: 15px;
+  }
+
+  .info-header h3 {
+    font-size: 16px;
+  }
+
+  /* Tablet specific */
+  @media (min-width: 481px) and (max-width: 768px) {
+    .level-row {
+      flex-direction: row;
+    }
+
+    .level-name {
+      width: 100px;
+      border-right: 1px solid #ddd;
+      border-bottom: none;
+      text-align: left;
+    }
+  }
+}
+
 .config-section {
   margin-bottom: 30px;
 }
@@ -452,4 +620,33 @@
   font-size: 14px;
   line-height: 1.5;
   color: #333;
+}
+
+/* Global mobile improvements */
+@media (max-width: 768px) {
+  /* Better touch targets */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Radar chart text improvements */
+  .radar-axis-text {
+    font-size: 10px !important;
+  }
+
+  /* Prevent text selection on mobile */
+  .chart-info-panel,
+  .attribute-table {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* Better scrolling */
+  .left-panel,
+  .right-panel {
+    -webkit-overflow-scrolling: touch;
+  }
 }
