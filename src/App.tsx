@@ -379,29 +379,56 @@ function App() {
     // Check for URL parameters first
     const urlConfig = getConfigFromUrl();
     if (urlConfig) {
-      // Merge URL config with preset structure if it matches a preset
-      const matchingPreset = presetConfigurations.find(p => p.name === urlConfig.name);
-      if (matchingPreset) {
-        setCurrentConfig({
-          ...matchingPreset,
-          attributes: urlConfig.attributes?.map((attr, index) => ({
-            ...matchingPreset.attributes[index],
-            name: attr.name,
-            value: attr.value,
-          })) || matchingPreset.attributes,
-          levels: urlConfig.levels || matchingPreset.levels,
-        });
+      if (urlConfig.isPreset) {
+        // If it's marked as a preset, find the matching preset and merge with URL values
+        const matchingPreset = presetConfigurations.find(p => p.name === urlConfig.name);
+        if (matchingPreset) {
+          setCurrentConfig({
+            ...matchingPreset,
+            attributes: urlConfig.attributes?.map((attr, index) => ({
+              ...matchingPreset.attributes[index],
+              name: attr.name,
+              value: attr.value,
+            })) || matchingPreset.attributes,
+            levels: urlConfig.levels || matchingPreset.levels,
+          });
+        } else {
+          // Preset not found, fall back to basic config
+          setCurrentConfig({
+            name: urlConfig.name || 'Custom Configuration',
+            attributes: urlConfig.attributes || [
+              { name: 'Attribute 1', value: 1 },
+              { name: 'Attribute 2', value: 1 },
+              { name: 'Attribute 3', value: 1 },
+            ],
+            levels: urlConfig.levels || 4,
+          });
+        }
       } else {
-        // Create a basic configuration from URL
-        setCurrentConfig({
-          name: urlConfig.name || 'Custom Configuration',
-          attributes: urlConfig.attributes || [
-            { name: 'Attribute 1', value: 1 },
-            { name: 'Attribute 2', value: 1 },
-            { name: 'Attribute 3', value: 1 },
-          ],
-          levels: urlConfig.levels || 4,
-        });
+        // Not marked as preset, check if name matches a preset anyway (backward compatibility)
+        const matchingPreset = presetConfigurations.find(p => p.name === urlConfig.name);
+        if (matchingPreset) {
+          setCurrentConfig({
+            ...matchingPreset,
+            attributes: urlConfig.attributes?.map((attr, index) => ({
+              ...matchingPreset.attributes[index],
+              name: attr.name,
+              value: attr.value,
+            })) || matchingPreset.attributes,
+            levels: urlConfig.levels || matchingPreset.levels,
+          });
+        } else {
+          // Create a basic configuration from URL
+          setCurrentConfig({
+            name: urlConfig.name || 'Custom Configuration',
+            attributes: urlConfig.attributes || [
+              { name: 'Attribute 1', value: 1 },
+              { name: 'Attribute 2', value: 1 },
+              { name: 'Attribute 3', value: 1 },
+            ],
+            levels: urlConfig.levels || 4,
+          });
+        }
       }
     }
   }, [getConfigFromUrl]);
