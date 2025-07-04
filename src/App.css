@@ -387,6 +387,20 @@
   background-color: #5a6268;
 }
 
+.share-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.share-btn:hover {
+  background-color: #218838;
+}
+
 .attribute-item-expanded {
   margin-bottom: 15px;
   background-color: white;

@@ -9,6 +9,7 @@ interface ConfigurationPanelProps {
   onConfigurationChange: (config: Configuration) => void;
   onSaveConfiguration: (config: Configuration) => void;
   onDeleteConfiguration: (configName: string) => void;
+  generateShareableUrl: (config: Configuration) => string;
 }
 
 const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
@@ -18,6 +19,7 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
   onConfigurationChange,
   onSaveConfiguration,
   onDeleteConfiguration,
+  generateShareableUrl,
 }) => {
   const [errors, setErrors] = useState<string[]>([]);
   const [saveAsName, setSaveAsName] = useState<string>('');
@@ -293,6 +295,28 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
             </div>
           </div>
         )}
+      </div>
+
+      <div className="config-section">
+        <h3>Share Configuration</h3>
+        <button
+          className="share-btn"
+          onClick={() => {
+            const url = generateShareableUrl(configuration);
+            navigator.clipboard.writeText(url).then(() => {
+              alert('Shareable URL copied to clipboard!');
+            }).catch(() => {
+              // Fallback for browsers that don't support clipboard API
+              prompt('Copy this URL to share:', url);
+            });
+          }}
+          style={{ width: '100%', marginBottom: '10px' }}
+        >
+          📋 Copy Shareable Link
+        </button>
+        <p style={{ fontSize: '12px', color: '#666', margin: '0' }}>
+          Share this URL to let others view your radar chart configuration
+        </p>
       </div>
 
       <div className="config-section">

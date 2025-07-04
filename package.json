@@ -4,6 +4,8 @@
   "private": true,
   "homepage": "https://drakeaharper.github.io/radar-chart-app",
   "dependencies": {
+    "@tanstack/react-router": "^1.124.0",
+    "@tanstack/router-devtools": "^1.124.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",

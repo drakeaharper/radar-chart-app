@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import ConfigurationPanel from './components/ConfigurationPanel';
 import RadarChart from './components/RadarChart';
+import { useUrlState } from './hooks/useUrlState';
 
 export interface AttributeLevelDescription {
   level: number;
@@ -361,10 +362,12 @@ const presetConfigurations: Configuration[] = [
 ];
 
 function App() {
+  const { getConfigFromUrl, updateUrlWithConfig, generateShareableUrl } = useUrlState();
   const [currentConfig, setCurrentConfig] = useState<Configuration>(presetConfigurations[0]);
   const [savedConfigurations, setSavedConfigurations] = useState<Configuration[]>([]);
   const [allConfigurations, setAllConfigurations] = useState<Configuration[]>(presetConfigurations);
 
+  // Initialize from URL or localStorage
   useEffect(() => {
     const saved = localStorage.getItem('savedConfigurations');
     if (saved) {
@@ -372,7 +375,36 @@ function App() {
       setSavedConfigurations(parsedSaved);
       setAllConfigurations([...presetConfigurations, ...parsedSaved]);
     }
-  }, []);
+
+    // Check for URL parameters first
+    const urlConfig = getConfigFromUrl();
+    if (urlConfig) {
+      // Merge URL config with preset structure if it matches a preset
+      const matchingPreset = presetConfigurations.find(p => p.name === urlConfig.name);
+      if (matchingPreset) {
+        setCurrentConfig({
+          ...matchingPreset,
+          attributes: urlConfig.attributes?.map((attr, index) => ({
+            ...matchingPreset.attributes[index],
+            name: attr.name,
+            value: attr.value,
+          })) || matchingPreset.attributes,
+          levels: urlConfig.levels || matchingPreset.levels,
+        });
+      } else {
+        // Create a basic configuration from URL
+        setCurrentConfig({
+          name: urlConfig.name || 'Custom Configuration',
+          attributes: urlConfig.attributes || [
+            { name: 'Attribute 1', value: 1 },
+            { name: 'Attribute 2', value: 1 },
+            { name: 'Attribute 3', value: 1 },
+          ],
+          levels: urlConfig.levels || 4,
+        });
+      }
+    }
+  }, [getConfigFromUrl]);
 
   const saveConfiguration = (config: Configuration) => {
     const existingIndex = savedConfigurations.findIndex((c) => c.name === config.name);
@@ -397,8 +429,16 @@ function App() {
     localStorage.setItem('savedConfigurations', JSON.stringify(newSavedConfigs));
 
     if (currentConfig.name === configName) {
-      setCurrentConfig(presetConfigurations[0]);
+      const newConfig = presetConfigurations[0];
+      setCurrentConfig(newConfig);
+      updateUrlWithConfig(newConfig);
     }
+  };
+
+  // Enhanced configuration change handler that updates URL
+  const handleConfigurationChange = (config: Configuration) => {
+    setCurrentConfig(config);
+    updateUrlWithConfig(config);
   };
 
   return (
@@ -411,7 +451,8 @@ function App() {
             savedConfigurations={savedConfigurations}
             onSaveConfiguration={saveConfiguration}
             onDeleteConfiguration={deleteConfiguration}
-            onConfigurationChange={setCurrentConfig}
+            onConfigurationChange={handleConfigurationChange}
+            generateShareableUrl={generateShareableUrl}
           />
         </div>
         <div className="right-panel">
