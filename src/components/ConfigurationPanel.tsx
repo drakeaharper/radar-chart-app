@@ -206,24 +206,30 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
   };
 
   return (
-    <div>
-      <h2>Configuration</h2>
-
-      <div className="config-section">
-        <h3>Configuration Name</h3>
+    <div className="space-y-6">
+      {/* Configuration Name */}
+      <div className="space-y-2">
+        <label htmlFor="config-name" className="block text-sm font-medium text-gray-700">
+          Configuration Name
+        </label>
         <input
+          id="config-name"
           type="text"
-          className="config-name-input"
+          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-radar-500 focus:border-radar-500 sm:text-sm"
           value={configuration.name}
           onChange={(e) => handleConfigurationNameChange(e.target.value)}
           placeholder="Configuration name"
         />
       </div>
 
-      <div className="config-section">
-        <h3>Load Configuration</h3>
+      {/* Load Configuration */}
+      <div className="space-y-2">
+        <label htmlFor="preset-selector" className="block text-sm font-medium text-gray-700">
+          Load Configuration
+        </label>
         <select
-          className="preset-selector"
+          id="preset-selector"
+          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-radar-500 focus:border-radar-500 sm:text-sm"
           value={configuration.name}
           onChange={(e) => handlePresetChange(e.target.value)}
         >
@@ -235,60 +241,59 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
         </select>
         {isSavedConfiguration(configuration.name) && (
           <button
-            className="delete-btn"
+            className="w-full mt-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             onClick={() => onDeleteConfiguration(configuration.name)}
-            style={{ marginTop: '10px', width: '100%' }}
           >
             Delete Configuration
           </button>
         )}
       </div>
 
-      <div className="config-section">
-        <h3>Save Configuration</h3>
-        <button
-          className="save-btn"
-          onClick={handleSaveCurrent}
-          disabled={errors.length > 0}
-          style={{ marginBottom: '10px', width: '100%' }}
-        >
-          Save Current Configuration
-        </button>
-        <button
-          className="save-as-btn"
-          onClick={() => setShowSaveDialog(true)}
-          disabled={errors.length > 0}
-          style={{ width: '100%' }}
-        >
-          Save As New Configuration
-        </button>
+      {/* Save Configuration */}
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">
+          Save Configuration
+        </label>
+        <div className="space-y-2">
+          <button
+            className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-radar-600 hover:bg-radar-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-radar-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleSaveCurrent}
+            disabled={errors.length > 0}
+          >
+            Save Current Configuration
+          </button>
+          <button
+            className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-radar-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => setShowSaveDialog(true)}
+            disabled={errors.length > 0}
+          >
+            Save As New Configuration
+          </button>
+        </div>
 
         {showSaveDialog && (
-          <div className="save-dialog">
+          <div className="mt-4 p-4 border border-gray-200 rounded-md bg-gray-50">
             <input
               type="text"
-              className="save-as-input"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-radar-500 focus:border-radar-500 sm:text-sm"
               value={saveAsName}
               onChange={(e) => setSaveAsName(e.target.value)}
               placeholder="Enter new configuration name"
-              style={{ marginTop: '10px', width: '100%' }}
             />
-            <div style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
+            <div className="mt-3 flex space-x-2">
               <button
-                className="confirm-save-btn"
+                className="flex-1 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-radar-600 hover:bg-radar-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-radar-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleSaveAs}
                 disabled={!saveAsName.trim()}
-                style={{ flex: 1 }}
               >
                 Save
               </button>
               <button
-                className="cancel-save-btn"
+                className="flex-1 inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-radar-500"
                 onClick={() => {
                   setShowSaveDialog(false);
                   setSaveAsName('');
                 }}
-                style={{ flex: 1 }}
               >
                 Cancel
               </button>
@@ -297,10 +302,13 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
         )}
       </div>
 
-      <div className="config-section">
-        <h3>Share Configuration</h3>
+      {/* Share Configuration */}
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">
+          Share Configuration
+        </label>
         <button
-          className="share-btn"
+          className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-radar-500"
           onClick={() => {
             const url = generateShareableUrl(configuration);
             navigator.clipboard.writeText(url).then(() => {
@@ -310,50 +318,60 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
               prompt('Copy this URL to share:', url);
             });
           }}
-          style={{ width: '100%', marginBottom: '10px' }}
         >
           📋 Copy Shareable Link
         </button>
-        <p style={{ fontSize: '12px', color: '#666', margin: '0' }}>
+        <p className="text-xs text-gray-500">
           Share this URL to let others view your radar chart configuration
         </p>
       </div>
 
-      <div className="config-section">
-        <h3>Attributes</h3>
-        <div className="attribute-list">
+      {/* Attributes */}
+      <div className="space-y-3">
+        <label className="block text-sm font-medium text-gray-700">
+          Attributes
+        </label>
+        <div className="space-y-3">
           {configuration.attributes.map((attribute, index) => (
-            <div key={index} className="attribute-item-expanded">
-              <div className="attribute-header">
+            <div key={index} className="border border-gray-200 rounded-md p-4 bg-white">
+              <div className="flex items-center space-x-2 mb-2">
                 <input
                   type="text"
-                  className="attribute-name"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-radar-500 focus:border-radar-500 sm:text-sm"
                   value={attribute.name}
                   onChange={(e) => handleAttributeNameChange(index, e.target.value)}
                   placeholder="Attribute name"
                 />
                 <input
                   type="number"
-                  className="attribute-value"
+                  className="w-20 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-radar-500 focus:border-radar-500 sm:text-sm"
                   value={attribute.value}
                   onChange={(e) => handleAttributeValueChange(index, parseInt(e.target.value) || 0)}
                   min="0"
                   max={configuration.levels}
                 />
-                <button className="expand-btn" onClick={() => toggleAttributeExpansion(index)}>
+                <button 
+                  className="p-2 text-gray-400 hover:text-gray-600"
+                  onClick={() => toggleAttributeExpansion(index)}
+                >
                   {expandedAttributes.has(index) ? '▼' : '▶'}
                 </button>
                 {configuration.attributes.length > 3 && (
-                  <button className="remove-btn" onClick={() => removeAttribute(index)}>
+                  <button 
+                    className="px-3 py-2 text-sm text-red-600 hover:text-red-800 border border-red-300 rounded-md hover:bg-red-50"
+                    onClick={() => removeAttribute(index)}
+                  >
                     Remove
                   </button>
                 )}
               </div>
               {expandedAttributes.has(index) && (
-                <div className="attribute-description">
-                  <label>Description:</label>
+                <div className="mt-3 space-y-2">
+                  <label className="block text-xs font-medium text-gray-700">
+                    Description:
+                  </label>
                   <textarea
-                    className="attribute-description-input"
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-radar-500 focus:border-radar-500 sm:text-sm"
                     value={attribute.description || ''}
                     onChange={(e) => handleAttributeDescriptionChange(index, e.target.value)}
                     placeholder="Enter attribute description..."
@@ -364,44 +382,56 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
             </div>
           ))}
         </div>
-        <button className="add-btn" onClick={addAttribute}>
+        <button 
+          className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-radar-500"
+          onClick={addAttribute}
+        >
           Add Attribute
         </button>
       </div>
 
-      <div className="config-section">
-        <div className="levels-header">
-          <h3>Levels</h3>
-          <button className="expand-btn" onClick={() => setExpandedLevels(!expandedLevels)}>
+      {/* Levels */}
+      <div className="space-y-3">
+        <div className="flex items-center space-x-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Levels
+          </label>
+          <button 
+            className="p-1 text-gray-400 hover:text-gray-600"
+            onClick={() => setExpandedLevels(!expandedLevels)}
+          >
             {expandedLevels ? '▼' : '▶'}
           </button>
         </div>
         <input
           type="number"
-          className="levels-input"
+          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-radar-500 focus:border-radar-500 sm:text-sm"
           value={configuration.levels}
           onChange={(e) => handleLevelsChange(parseInt(e.target.value) || 1)}
           min="1"
         />
         {expandedLevels && (
-          <div className="level-descriptions">
-            <h4>Level Descriptions:</h4>
+          <div className="space-y-3">
+            <h4 className="text-sm font-medium text-gray-700">Level Descriptions:</h4>
             {(configuration.levelDescriptions || []).map((levelDesc, index) => (
-              <div key={index} className="level-description-item">
-                <div className="level-description-header">
+              <div key={index} className="border border-gray-200 rounded-md p-4 bg-white">
+                <div className="flex items-center space-x-2 mb-2">
                   <input
                     type="text"
-                    className="level-name-input"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-radar-500 focus:border-radar-500 sm:text-sm"
                     value={levelDesc.name}
                     onChange={(e) => handleLevelNameChange(index, e.target.value)}
                     placeholder="Level name"
                   />
-                  <button className="remove-btn" onClick={() => removeLevelDescription(index)}>
+                  <button 
+                    className="px-3 py-2 text-sm text-red-600 hover:text-red-800 border border-red-300 rounded-md hover:bg-red-50"
+                    onClick={() => removeLevelDescription(index)}
+                  >
                     Remove
                   </button>
                 </div>
                 <textarea
-                  className="level-description-input"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-radar-500 focus:border-radar-500 sm:text-sm"
                   value={levelDesc.description}
                   onChange={(e) => handleLevelDescriptionChange(index, e.target.value)}
                   placeholder="Enter level description..."
@@ -409,21 +439,33 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
                 />
               </div>
             ))}
-            <button className="add-btn" onClick={addLevelDescription}>
+            <button 
+              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-radar-500"
+              onClick={addLevelDescription}
+            >
               Add Level Description
             </button>
           </div>
         )}
       </div>
 
+      {/* Validation Errors */}
       {errors.length > 0 && (
-        <div className="config-section">
-          <h3>Validation Errors</h3>
-          {errors.map((error, index) => (
-            <div key={index} className="error-message">
-              {error}
+        <div className="rounded-md bg-red-50 p-4">
+          <div className="flex">
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-red-800">
+                Validation Errors
+              </h3>
+              <div className="mt-2 text-sm text-red-700">
+                <ul className="list-disc list-inside space-y-1">
+                  {errors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          ))}
+          </div>
         </div>
       )}
     </div>

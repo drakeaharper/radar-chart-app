@@ -442,21 +442,58 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <div className="app-container">
-        <div className="left-panel">
-          <ConfigurationPanel
-            configuration={currentConfig}
-            presetConfigurations={allConfigurations}
-            savedConfigurations={savedConfigurations}
-            onSaveConfiguration={saveConfiguration}
-            onDeleteConfiguration={deleteConfiguration}
-            onConfigurationChange={handleConfigurationChange}
-            generateShareableUrl={generateShareableUrl}
-          />
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-gray-900">Radar Chart App</h1>
+              <span className="ml-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-radar-100 text-radar-700">
+                Interactive
+              </span>
+            </div>
+            <div className="text-sm text-gray-500">
+              Capability Assessment Tool
+            </div>
+          </div>
         </div>
-        <div className="right-panel">
-          <RadarChart configuration={currentConfig} />
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="lg:grid lg:grid-cols-5 lg:gap-8">
+          {/* Configuration Panel */}
+          <div className="lg:col-span-2 mb-8 lg:mb-0">
+            <div className="bg-white shadow-sm rounded-lg border border-gray-200 sticky top-6">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-medium text-gray-900">Configuration</h2>
+                <p className="mt-1 text-sm text-gray-500">
+                  Customize your radar chart settings and attributes
+                </p>
+              </div>
+              <div className="px-6 py-4 max-h-[calc(100vh-200px)] overflow-y-auto">
+                <ConfigurationPanel
+                  configuration={currentConfig}
+                  presetConfigurations={allConfigurations}
+                  savedConfigurations={savedConfigurations}
+                  onSaveConfiguration={saveConfiguration}
+                  onDeleteConfiguration={deleteConfiguration}
+                  onConfigurationChange={handleConfigurationChange}
+                  generateShareableUrl={generateShareableUrl}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Chart Panel */}
+          <div className="lg:col-span-3">
+            <div className="bg-white shadow-sm rounded-lg border border-gray-200">
+              <div className="p-6">
+                <RadarChart configuration={currentConfig} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
