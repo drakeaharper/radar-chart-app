@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { type Attribute, type Configuration } from '../App';
 
 interface ConfigurationPanelProps {
@@ -26,6 +26,7 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
   const [showSaveDialog, setShowSaveDialog] = useState<boolean>(false);
   const [expandedAttributes, setExpandedAttributes] = useState<Set<number>>(new Set());
   const [expandedLevels, setExpandedLevels] = useState<boolean>(false);
+  const [showToast, setShowToast] = useState<boolean>(false);
 
   const validateConfiguration = (config: Configuration): string[] => {
     const newErrors: string[] = [];
@@ -148,6 +149,22 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
     setExpandedAttributes(newExpanded);
   };
 
+  const showToastNotification = () => {
+    setShowToast(true);
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000); // Hide after 3 seconds
+  };
+
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
+
   const isSavedConfiguration = (configName: string): boolean => {
     return savedConfigurations.some((config) => config.name === configName);
   };
@@ -206,7 +223,17 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <>
+      {/* Toast Notification - positioned outside the main container */}
+      {showToast && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg transition-all duration-300 ease-in-out">
+          <div className="flex items-center space-x-2">
+            <span className="text-sm font-medium">✓ Shareable URL copied to clipboard!</span>
+          </div>
+        </div>
+      )}
+      
+      <div className="space-y-6">
       {/* Configuration Name */}
       <div className="space-y-2">
         <label htmlFor="config-name" className="block text-sm font-medium text-gray-700">
@@ -312,7 +339,7 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
           onClick={() => {
             const url = generateShareableUrl(configuration);
             navigator.clipboard.writeText(url).then(() => {
-              alert('Shareable URL copied to clipboard!');
+              showToastNotification();
             }).catch(() => {
               // Fallback for browsers that don't support clipboard API
               prompt('Copy this URL to share:', url);
@@ -473,7 +500,8 @@ const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 };
 
