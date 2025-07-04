@@ -1,6 +1,6 @@
 import type React from 'react';
 import { useState } from 'react';
-import { type Attribute, type Configuration, LevelDescription } from '../App';
+import { type Attribute, type Configuration } from '../App';
 
 interface ConfigurationPanelProps {
   configuration: Configuration;

@@ -25,7 +25,7 @@ const RadarChart: React.FC<RadarChartProps> = ({ configuration }) => {
     fullMark: configuration.levels,
   }));
 
-  const hasAttributeDescriptions = configuration.attributes.some((attr) => attr.description);
+  // const hasAttributeDescriptions = configuration.attributes.some((attr) => attr.description);
   const hasLevelDescriptions =
     configuration.levelDescriptions && configuration.levelDescriptions.length > 0;
 
